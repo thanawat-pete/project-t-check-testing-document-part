@@ -1,0 +1,23 @@
+const { defineConfig, devices } = require('@playwright/test');
+
+module.exports = defineConfig({
+  timeout: 60000,
+  testDir: './playwright/tests',
+  fullyParallel: false,
+  forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 2 : 0,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: 'html',
+  use: {
+    trace: 'on-first-retry',
+    baseURL: 'https://t-check-two.vercel.app',
+    screenshot: 'on', // Capture screenshot for every test (or 'only-on-failure')
+    video: 'retain-on-failure',
+  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
+});

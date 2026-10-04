@@ -1,0 +1,14 @@
+{
+  "name": "testing-document-case",
+  "version": "1.0.0",
+  "description": "Playwright and Robot Framework testing for T-Check document management",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "robot": "robot document_management.robot"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.42.0",
+    "@types/node": "^20.11.24"
+  }
+}

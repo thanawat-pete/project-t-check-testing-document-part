@@ -1,0 +1,12 @@
+node_modules/
+playwright-report/
+test-results/
+.vscode/
+venv/
+*.log
+log.html
+report.html
+output.xml
+editor_debug.html
+editor_debug.png
+playwright-log.txt
