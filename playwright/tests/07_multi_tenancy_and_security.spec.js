@@ -18,9 +18,16 @@ test.describe('Feature 7: Multi-Tenancy & IDOR Isolation', () => {
     try {
       await loginToSystem(pageA);
       await pageA.goto(`${BASE_URL}/docs`);
-      const userADocument = pageA.getByRole('heading', { level: 4 }).first();
-      await expect(userADocument).toBeVisible();
-      const userADocumentTitle = (await userADocument.innerText()).trim();
+      const userADocumentTitle = `TC-SEC-001-${Date.now()}`;
+      const createButton = pageA.locator('button').filter({ has: pageA.locator('.lucide-plus') });
+      await createButton.click();
+      await pageA.waitForURL('**/docs/editor*');
+      const titleInput = pageA.getByRole('textbox', { name: 'เอกสารไม่มีชื่อ' });
+      await titleInput.fill(userADocumentTitle);
+      await expect(titleInput).toHaveValue(userADocumentTitle);
+      await expect(pageA.getByText('บันทึกแล้ว')).toBeVisible();
+      await pageA.goto(`${BASE_URL}/docs`);
+      await expect(pageA.getByRole('heading', { name: userADocumentTitle, exact: true })).toBeVisible();
 
       await loginToSystem(pageB, userBUsername, userBPassword);
       await pageB.goto(`${BASE_URL}/docs`);
