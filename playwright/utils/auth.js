@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 
-const BASE_URL = 'https://t-check-two.vercel.app';
+export const BASE_URL = 'https://t-check-two.vercel.app';
 
 export async function loginToSystem(page, email = 'thanawat', password = 'password1234') {
   await page.goto(`${BASE_URL}/sign-in`);

@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('../utils/fixtures');
 const { loginToSystem, BASE_URL } = require('../utils/auth');
 
 test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
@@ -11,26 +11,26 @@ test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
     const createBtn = page.locator('button').filter({ has: page.locator('.lucide-plus') });
     await createBtn.click();
     await page.waitForURL('**/docs/editor*');
-    const titleInput = page.locator('input[placeholder="ชื่อเอกสาร..."]').first();
-    await titleInput.waitFor({ state: 'visible' });
+    await expect(page.getByRole('textbox', { name: 'เอกสารไม่มีชื่อ' })).toBeVisible();
   });
 
   test('TC-EDT-001: Rename document title and monitor live Thai statistics', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs/editor`);
-    const titleInput = page.locator('input[placeholder="ชื่อเอกสาร..."]').first();
+    const titleInput = page.getByRole('textbox', { name: 'เอกสารไม่มีชื่อ' });
     await titleInput.fill('รายงานผลการวิเคราะห์ภาษาไทย 2569');
+    await expect(titleInput).toHaveValue('รายงานผลการวิเคราะห์ภาษาไทย 2569');
     await page.locator('.ProseMirror').fill('ระบบตรวจสอบไวยากรณ์ภาษาไทยรุ่นใหม่ล่าสุด');
-    // Counters verification logic here
+    await expect(page.locator('.ProseMirror')).toContainText('ระบบตรวจสอบไวยากรณ์ภาษาไทยรุ่นใหม่ล่าสุด');
   });
 
   test('TC-EDT-002: Debounced auto-save and manual Ctrl+S shortcut', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs/editor`);
     await page.locator('.ProseMirror').fill('ทดสอบ Auto-save');
     await page.waitForTimeout(3000);
-    const saveBadge = page.locator('text=ดราฟต์ล่าสุด').first();
-    await saveBadge.waitFor({ state: 'visible' });
+    await expect(page.getByText('บันทึกแล้ว')).toBeVisible();
     
     await page.locator('.ProseMirror').fill('ทดสอบ Manual Save');
     await page.keyboard.press('Control+s');
+    await expect(page.getByText('บันทึกแล้ว')).toBeVisible();
   });
 });

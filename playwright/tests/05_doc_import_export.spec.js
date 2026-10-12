@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('../utils/fixtures');
 const { loginToSystem, BASE_URL } = require('../utils/auth');
 
 test.describe('Feature 5: Document Import & Export', () => {

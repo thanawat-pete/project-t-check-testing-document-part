@@ -2,22 +2,27 @@
 Library         Browser
 Resource        ../resources/variables.resource
 Resource        ../resources/keywords.resource
+Suite Setup     Start Test Browser
+Suite Teardown  Close Browser
+Test Setup      Start Test Context
+Test Teardown   Close Test Context
 
 *** Test Cases ***
 TC-LST-001: View document cards in library
-    New Context
     Login To System
-    Go To    ${DOCS_URL}
-    Wait For Elements State    text=การจัดการเอกสาร    visible
+    Go To Documents Page
+    Wait For Elements State    ${BTN_CREATE_DOC}    visible
+    Wait For Elements State    ${INPUT_SEARCH_DOC}    visible
 
 TC-SCH-001: Real-time search by document title or content
-    New Context
     Login To System
-    Go To    ${DOCS_URL}
-    Fill Text    input    งบประมาณ
+    Go To Documents Page
+    Search For Document    เอกสารไม่มีชื่อ
+    ${search}=    Get Attribute    ${INPUT_SEARCH_DOC}    value
+    Should Be Equal    ${search}    เอกสารไม่มีชื่อ
 
 TC-SRT-001: Sort documents by title in ascending alphabetical order
-    New Context
     Login To System
-    Go To    ${DOCS_URL}
-    # Click Sort
+    Go To Documents Page
+    Click    ${BTN_SORT_DOC}
+    Click    text=ชื่อ (A-Z)

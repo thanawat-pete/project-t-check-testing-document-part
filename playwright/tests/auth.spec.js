@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('../utils/fixtures');
 
 const BASE_URL = 'https://t-check-two.vercel.app';
 

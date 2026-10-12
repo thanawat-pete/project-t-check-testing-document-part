@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('../utils/fixtures');
 const { loginToSystem, BASE_URL } = require('../utils/auth');
 
 test.describe('Feature 1: Guest Mode & Local Draft', () => {
@@ -17,7 +17,6 @@ test.describe('Feature 1: Guest Mode & Local Draft', () => {
 
   test('TC-GST-003: Guest token quota is initialized to 1000 tokens', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs/editor`);
-    const tokenDisplay = page.locator('text=1,000');
-    // Ensure token element is visible if it exists in the UI
+    await expect(page.getByText('1,000', { exact: false })).toBeVisible();
   });
 });

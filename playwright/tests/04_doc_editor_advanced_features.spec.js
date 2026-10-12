@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('../utils/fixtures');
 const { loginToSystem, BASE_URL } = require('../utils/auth');
 
 test.describe('Feature 4: AI Grammar, Tone & History', () => {
@@ -27,7 +27,7 @@ test.describe('Feature 4: AI Grammar, Tone & History', () => {
     await page.locator('.ProseMirror').fill('ทกสอก');
     const checkBtn = page.locator('button').filter({ has: page.locator('.lucide-search') }).first();
     if (await checkBtn.isVisible({ timeout: 2000 })) await checkBtn.click();
-    const editBtn = page.locator('button:has-text("นำไปใช้")').first();
+    const editBtn = page.getByRole('button', { name: 'แก้ไข', exact: true }).first();
     await editBtn.waitFor({ state: 'visible', timeout: 10000 });
     await editBtn.click();
     await expect(page.locator('.ProseMirror')).toContainText('ทดสอบ');

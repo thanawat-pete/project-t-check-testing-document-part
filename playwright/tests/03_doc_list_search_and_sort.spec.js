@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('../utils/fixtures');
 const { loginToSystem, BASE_URL } = require('../utils/auth');
 
 test.describe('Feature 3: Document List, Search & Sort', () => {
@@ -8,13 +8,14 @@ test.describe('Feature 3: Document List, Search & Sort', () => {
   });
 
   test('TC-LST-001: View document cards in library', async ({ page }) => {
-    const header = page.locator('text=การจัดการเอกสาร').first();
-    await header.waitFor({ state: 'visible' });
+    await expect(page.getByRole('button', { name: 'สร้างเอกสารใหม่' })).toBeVisible();
+    await expect(page.getByRole('textbox', { name: 'ค้นหาเอกสาร...' })).toBeVisible();
   });
 
   test('TC-SCH-001: Real-time search by document title or content', async ({ page }) => {
-    const searchInput = page.locator('input').first();
-    await searchInput.fill('งบประมาณ');
+    const searchInput = page.getByRole('textbox', { name: 'ค้นหาเอกสาร...' });
+    await searchInput.fill('เอกสารไม่มีชื่อ');
+    await expect(searchInput).toHaveValue('เอกสารไม่มีชื่อ');
     await page.waitForTimeout(1000); // Wait for debounce
   });
 

@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "robot": "robot document_management.robot"
+    "robot": "node robot/run.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.42.0",
-    "@types/node": "^20.11.24"
+    "@types/node": "^20.11.24",
+    "dotenv": "^18.0.7"
   }
 }
