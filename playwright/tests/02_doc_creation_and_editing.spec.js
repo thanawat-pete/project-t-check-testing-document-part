@@ -6,7 +6,9 @@ test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
     await loginToSystem(page);
   });
 
+  // เคสสร้างเอกสารจากคลังและตรวจว่าระบบนำไปยังหน้า editor
   test('TC-CRE-001: Click create new document and redirect to editor', async ({ page }) => {
+    // ขั้นตอน: เปิดคลัง กดสร้างเอกสาร รอเปลี่ยนหน้า และตรวจช่องชื่อเอกสาร
     await page.goto(`${BASE_URL}/docs`);
     const createBtn = page.locator('button').filter({ has: page.locator('.lucide-plus') });
     await createBtn.click();
@@ -14,7 +16,9 @@ test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
     await expect(page.getByRole('textbox', { name: 'เอกสารไม่มีชื่อ' })).toBeVisible();
   });
 
+  // เคสเปลี่ยนชื่อเอกสารและกรอกเนื้อหาภาษาไทย
   test('TC-EDT-001: Rename document title and monitor live Thai statistics', async ({ page }) => {
+    // ขั้นตอน: เปลี่ยนชื่อ ตรวจค่าชื่อ แล้วกรอกและตรวจเนื้อหาใน editor
     await page.goto(`${BASE_URL}/docs/editor`);
     const titleInput = page.getByRole('textbox', { name: 'เอกสารไม่มีชื่อ' });
     await titleInput.fill('รายงานผลการวิเคราะห์ภาษาไทย 2569');
@@ -23,7 +27,9 @@ test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
     await expect(page.locator('.ProseMirror')).toContainText('ระบบตรวจสอบไวยากรณ์ภาษาไทยรุ่นใหม่ล่าสุด');
   });
 
+  // เคสตรวจการบันทึกอัตโนมัติและคำสั่งบันทึกด้วย Ctrl+S
   test('TC-EDT-002: Debounced auto-save and manual Ctrl+S shortcut', async ({ page }) => {
+    // ขั้นตอน: กรอกข้อความรอสถานะบันทึก แก้ข้อความอีกครั้ง และสั่งบันทึกด้วยคีย์ลัด
     await page.goto(`${BASE_URL}/docs/editor`);
     await page.locator('.ProseMirror').fill('ทดสอบ Auto-save');
     await page.waitForTimeout(3000);

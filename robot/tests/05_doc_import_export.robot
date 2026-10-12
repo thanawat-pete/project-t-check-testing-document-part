@@ -8,12 +8,16 @@ Test Setup      Start Test Context
 Test Teardown   Close Test Context
 
 *** Test Cases ***
+# เคสตรวจว่าหน้าคลังเอกสารแสดงทางเลือกนำเข้าไฟล์
 TC-IMP-001: Import local text file into document
+    # ขั้นตอน: ล็อกอิน เปิดหน้าคลัง และตรวจว่ามีปุ่ม Import
     Login To System
     Go To Documents Page
     Wait For Elements State    text=Import    visible
 
+# เคสเปิดเมนูส่งออกเอกสารจากหน้า editor
 TC-EXP-001: Open Export modal and select export format
+    # ขั้นตอน: ล็อกอิน เปิด editor ตรวจปุ่มส่งออก และกดเมื่อปุ่มพร้อมใช้งาน
     Login To System
     Go To And Pause    ${DOCS_EDITOR_URL}
     ${export_visible}=    Run Keyword And Return Status    Wait For Elements State    xpath=//button[.//svg[contains(@class, 'lucide-download')]]    visible    timeout=2s

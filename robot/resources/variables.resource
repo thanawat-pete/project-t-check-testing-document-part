@@ -20,7 +20,7 @@ ${BTN_CREATE_DOC}       role=button[name="สร้างเอกสารใ�
 ${INPUT_TITLE}          role=textbox[name="เอกสารไม่มีชื่อ"]
 ${INPUT_EDITOR}         css=.ProseMirror
 ${INPUT_SEARCH_DOC}     role=textbox[name="ค้นหาเอกสาร..."]
-${BTN_SORT_DOC}         xpath=//label[.//svg[contains(@class, 'lucide-arrow-up-down')]]
+${BTN_SORT_DOC}         text=ล่าสุดก่อน
 ${BTN_TRASH_ICON}       xpath=//button[.//svg[contains(@class, 'lucide-trash-2')]]
 ${BTN_CONFIRM_DELETE}   css=button.bg-red-500
 ${BTN_SAVE_DOC}         xpath=//button[.//svg[contains(@class, 'lucide-save')]]

@@ -5,6 +5,7 @@ const userBUsername = process.env.TEST_USER_B_USERNAME;
 const userBPassword = process.env.TEST_USER_B_PASSWORD;
 
 test.describe('Feature 7: Multi-Tenancy & IDOR Isolation', () => {
+  // เคสตรวจว่าเอกสารของ User A ไม่ปรากฏในคลังของ User B
   test('TC-SEC-001: User B cannot see User A documents', async ({ browser }) => {
     test.skip(
       !userBUsername || !userBPassword,
@@ -16,6 +17,7 @@ test.describe('Feature 7: Multi-Tenancy & IDOR Isolation', () => {
     const pageA = addNavigationPause(await contextA.newPage());
     const pageB = addNavigationPause(await contextB.newPage());
     try {
+      // ขั้นตอน: ล็อกอินเป็น User A สร้างเอกสารชื่อเฉพาะ และตรวจว่าเอกสารอยู่ในคลัง
       await loginToSystem(pageA);
       await pageA.goto(`${BASE_URL}/docs`);
       const userADocumentTitle = `TC-SEC-001-${Date.now()}`;
@@ -29,6 +31,7 @@ test.describe('Feature 7: Multi-Tenancy & IDOR Isolation', () => {
       await pageA.goto(`${BASE_URL}/docs`);
       await expect(pageA.getByRole('heading', { name: userADocumentTitle, exact: true })).toBeVisible();
 
+      // ขั้นตอนต่อ: ล็อกอินเป็น User B ใน context แยก และตรวจว่าไม่เห็นชื่อเอกสารนั้น
       await loginToSystem(pageB, userBUsername, userBPassword);
       await pageB.goto(`${BASE_URL}/docs`);
       await expect(pageB.getByRole('heading', { name: userADocumentTitle, exact: true })).toHaveCount(0);

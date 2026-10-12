@@ -7,11 +7,13 @@ test.describe('Feature 3: Document List, Search & Sort', () => {
     await page.goto(`${BASE_URL}/docs`);
   });
 
+  // เคสตรวจว่าคลังเอกสารมีปุ่มสร้างเอกสารและช่องค้นหา
   test('TC-LST-001: View document cards in library', async ({ page }) => {
     await expect(page.getByRole('button', { name: 'สร้างเอกสารใหม่' })).toBeVisible();
     await expect(page.getByRole('textbox', { name: 'ค้นหาเอกสาร...' })).toBeVisible();
   });
 
+  // เคสค้นหาเอกสารจากชื่อหรือเนื้อหาและตรวจค่าคำค้นหา
   test('TC-SCH-001: Real-time search by document title or content', async ({ page }) => {
     const searchInput = page.getByRole('textbox', { name: 'ค้นหาเอกสาร...' });
     await searchInput.fill('เอกสารไม่มีชื่อ');
@@ -19,7 +21,9 @@ test.describe('Feature 3: Document List, Search & Sort', () => {
     await page.waitForTimeout(1000); // Wait for debounce
   });
 
+  // เคสเลือกการเรียงเอกสารตามชื่อจาก A ถึง Z
   test('TC-SRT-001: Sort documents by title in ascending alphabetical order (A-Z)', async ({ page }) => {
+    // ขั้นตอน: เปิดตัวเลือกการเรียงลำดับ แล้วเลือกชื่อแบบ A-Z
     const sortDropdown = page.locator('label:has(.lucide-arrow-up-down)');
     await sortDropdown.click();
     await page.locator('button:has-text("ชื่อ (A-Z)")').click();

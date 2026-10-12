@@ -6,6 +6,7 @@ test.describe('Feature 6: Trash Lifecycle & Hard Delete', () => {
     await loginToSystem(page);
   });
 
+  // เคสย้ายเอกสารที่กำลังใช้งานไปยังถังขยะและยืนยันการลบ
   test('TC-TRH-001: Move an active document to trash', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs`);
     const trashIconBtn = page.locator('button').filter({ has: page.locator('.lucide-trash-2') }).first();
@@ -17,6 +18,7 @@ test.describe('Feature 6: Trash Lifecycle & Hard Delete', () => {
     }
   });
 
+  // เคสเปิดหน้าจัดการถังขยะจากคลังเอกสาร
   test('TC-TRH-002: Trash Management & Search', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs`);
     const trashBtn = page.locator('a, button').filter({ hasText: 'ถังขยะ' }).first();
@@ -24,6 +26,7 @@ test.describe('Feature 6: Trash Lifecycle & Hard Delete', () => {
     await page.waitForURL('**/docs/trash');
   });
 
+  // เคสกู้คืนเอกสารจากถังขยะเมื่อมีเอกสารให้กู้คืน
   test('TC-TRH-003: Restore Document from Trash', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs/trash`);
     const restoreBtn = page.locator('button').filter({ has: page.locator('.lucide-refresh-cw, .lucide-rotate-ccw, :text("กู้คืน")') }).first();
@@ -35,6 +38,7 @@ test.describe('Feature 6: Trash Lifecycle & Hard Delete', () => {
     }
   });
 
+  // เคสลบเอกสารทั้งหมดในถังขยะอย่างถาวรเมื่อมีรายการ
   test('TC-TRH-004: Hard Delete & Empty Trash', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs/trash`);
     const emptyTrashBtn = page.locator('button:has-text("ล้างถังขยะ")').first();

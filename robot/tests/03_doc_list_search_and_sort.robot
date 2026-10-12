@@ -8,20 +8,26 @@ Test Setup      Start Test Context
 Test Teardown   Close Test Context
 
 *** Test Cases ***
+# เคสตรวจองค์ประกอบหลักของหน้าคลังเอกสาร
 TC-LST-001: View document cards in library
+    # ขั้นตอน: ล็อกอิน เปิดหน้ารายการ แล้วตรวจปุ่มสร้างและช่องค้นหา
     Login To System
     Go To Documents Page
     Wait For Elements State    ${BTN_CREATE_DOC}    visible
     Wait For Elements State    ${INPUT_SEARCH_DOC}    visible
 
+# เคสค้นหาเอกสารด้วยชื่อหรือเนื้อหา
 TC-SCH-001: Real-time search by document title or content
+    # ขั้นตอน: เปิดคลัง ค้นหาด้วยชื่อเอกสาร และตรวจค่าที่กรอกในช่องค้นหา
     Login To System
     Go To Documents Page
     Search For Document    เอกสารไม่มีชื่อ
     ${search}=    Get Attribute    ${INPUT_SEARCH_DOC}    value
     Should Be Equal    ${search}    เอกสารไม่มีชื่อ
 
+# เคสเรียงเอกสารตามชื่อจาก A ถึง Z
 TC-SRT-001: Sort documents by title in ascending alphabetical order
+    # ขั้นตอน: เปิดเมนูเรียงลำดับ แล้วเลือกชื่อแบบ A-Z
     Login To System
     Go To Documents Page
     Click    ${BTN_SORT_DOC}
