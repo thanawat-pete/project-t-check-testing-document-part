@@ -13,6 +13,7 @@ test.describe('Feature 5: Document Import & Export', () => {
     const importBtn = page.locator('button:has-text("Import")');
     // await importBtn.click();
     // Use page.setInputFiles('input[type="file"]', 'path/to/file.txt');
+    //เพื่มการเช็คข้อมูลเอกสารที่เิพิ่ม import เข้าไป
   });
 
   // เคสเปิดเมนูส่งออกเอกสารจากหน้า editor
@@ -23,6 +24,7 @@ test.describe('Feature 5: Document Import & Export', () => {
     const exportBtn = page.locator('button').filter({ has: page.locator('.lucide-download') }).first();
     if(await exportBtn.isVisible()) {
       await exportBtn.click();
+          //เพื่มการเช็คข้อมูลเอกสารที่ว่ามีการทำ export มาเป็น PDF เข้าไป
     }
   });
 });

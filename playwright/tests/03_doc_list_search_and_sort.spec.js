@@ -27,5 +27,6 @@ test.describe('Feature 3: Document List, Search & Sort', () => {
     const sortDropdown = page.locator('label:has(.lucide-arrow-up-down)');
     await sortDropdown.click();
     await page.locator('button:has-text("ชื่อ (A-Z)")').click();
+    //เพิ่มการเช็คเอกสาร
   });
 });
