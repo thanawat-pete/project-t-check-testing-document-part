@@ -5,7 +5,7 @@ Resource        ../resources/keywords.resource
 Suite Setup     Start Test Browser
 Suite Teardown  Close Browser
 Test Setup      Start Test Context
-Test Teardown   Close Test Context
+Test Teardown   Verify Page Has Readable Text And Close Test Context
 
 *** Test Cases ***
 # เคสสร้างเอกสารใหม่และตรวจว่าหน้า editor เปิดขึ้น
@@ -15,6 +15,7 @@ TC-CRE-001: Click create new document and redirect to editor
     Go To Documents Page
     Create A New Document
     Wait For Elements State    ${INPUT_TITLE}    visible
+    Wait For Elements State    ${INPUT_EDITOR}    visible
 
 # เคสเปลี่ยนชื่อเอกสารและตรวจข้อความภาษาไทยใน editor
 TC-EDT-001: Rename document title and monitor live Thai statistics
@@ -37,3 +38,4 @@ TC-EDT-002: Debounced auto-save and manual Ctrl+S shortcut
     Fill Text    ${INPUT_EDITOR}    ทดสอบ Manual Save
     Press Keys    ${INPUT_EDITOR}    Control+s
     Wait For Elements State    text=บันทึกแล้ว    visible    timeout=10s
+    Get Text    ${INPUT_EDITOR}    contains    ทดสอบ Manual Save

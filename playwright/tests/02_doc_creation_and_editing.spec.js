@@ -14,6 +14,7 @@ test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
     await createBtn.click();
     await page.waitForURL('**/docs/editor*');
     await expect(page.getByRole('textbox', { name: 'เอกสารไม่มีชื่อ' })).toBeVisible();
+    await expect(page.locator('.ProseMirror')).toBeVisible();
   });
 
   // เคสเปลี่ยนชื่อเอกสารและกรอกเนื้อหาภาษาไทย
@@ -38,5 +39,6 @@ test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
     await page.locator('.ProseMirror').fill('ทดสอบ Manual Save');
     await page.keyboard.press('Control+s');
     await expect(page.getByText('บันทึกแล้ว')).toBeVisible();
+    await expect(page.locator('.ProseMirror')).toContainText('ทดสอบ Manual Save');
   });
 });

@@ -10,10 +10,10 @@ test.describe('Feature 5: Document Import & Export', () => {
   test('TC-IMP-001: Import local text file into document', async ({ page }) => {
     // ขั้นตอน: เปิดคลังและเตรียมปุ่ม Import สำหรับการนำเข้า
     await page.goto(`${BASE_URL}/docs`);
-    const importBtn = page.locator('button:has-text("Import")');
-    // await importBtn.click();
-    // Use page.setInputFiles('input[type="file"]', 'path/to/file.txt');
-    //เพื่มการเช็คข้อมูลเอกสารที่เิพิ่ม import เข้าไป
+    const importBtn = page.getByText('Import', { exact: true });
+    await expect(importBtn).toBeVisible();
+    await importBtn.click();
+    await expect(page.getByRole('button', { name: 'File (TXT, DOCX, PDF)' })).toBeVisible();
   });
 
   // เคสเปิดเมนูส่งออกเอกสารจากหน้า editor
@@ -22,9 +22,12 @@ test.describe('Feature 5: Document Import & Export', () => {
     await page.goto(`${BASE_URL}/docs/editor`);
     // หาไอคอนดาวน์โหลด/ส่งออกในแถบเครื่องมือ
     const exportBtn = page.locator('button').filter({ has: page.locator('.lucide-download') }).first();
-    if(await exportBtn.isVisible()) {
-      await exportBtn.click();
-          //เพื่มการเช็คข้อมูลเอกสารที่ว่ามีการทำ export มาเป็น PDF เข้าไป
-    }
+    await expect(exportBtn).toBeVisible();
+    await exportBtn.click();
+    const pdfExportOption = page.getByRole('button', { name: /PDF/ }).first();
+    await expect(pdfExportOption).toBeVisible();
+    await expect(page.getByText(/Word|DOCX/, { exact: false }).first()).toBeVisible();
+    await pdfExportOption.click();
+    await expect(page.getByRole('status').filter({ hasText: 'ไม่มีเนื้อหาให้ส่งออก' })).toBeVisible();
   });
 });

@@ -15,15 +15,20 @@ test.describe('Feature 4: AI Grammar, Tone & History', () => {
     if (await checkBtn.isVisible({ timeout: 2000 })) {
       await checkBtn.click();
     }
+    await expect(page.locator('.ProseMirror')).toContainText('สวัดดีตอนเช้า');
   });
 
   // เคสเปิดหน้าต่างตัวเลือกโทนภาษาและตรวจว่าหน้าต่างแสดงขึ้น
   test('TC-TON-001: Switch writing tone between Strict and Casual', async ({ page }) => {
-    // ขั้นตอน: ค้นหาปุ่มปรับโทน หากแสดงอยู่ให้เปิดและตรวจว่าหน้าต่างเลือกโทนปรากฏ
+    const editor = page.locator('.ProseMirror');
+    await editor.fill('ข้อความสำหรับตรวจสอบการแสดงผลบนหน้าเว็บ');
+    await expect(editor).toContainText('ข้อความสำหรับตรวจสอบการแสดงผลบนหน้าเว็บ');
+
+    // ตรวจสอบ Modal เมื่อระบบแสดงปุ่มปรับโทนภาษา
     const toneBtn = page.locator('button').filter({ has: page.locator('.lucide-languages') });
     if (await toneBtn.isVisible()) {
       await toneBtn.click();
-      await page.locator('text=เลือกโทนภาษาที่ต้องการปรับ').waitFor({ state: 'visible' });
+      await expect(page.locator('text=เลือกโทนภาษาที่ต้องการปรับ')).toBeVisible();
     }
   });
 

@@ -1,4 +1,4 @@
-const { test, expect, addNavigationPause } = require('../utils/fixtures');
+const { test, expect, addNavigationPause, expectPageHasReadableText } = require('../utils/fixtures');
 const { loginToSystem, BASE_URL } = require('../utils/auth');
 
 const userBUsername = process.env.TEST_USER_B_USERNAME;
@@ -30,11 +30,13 @@ test.describe('Feature 7: Multi-Tenancy & IDOR Isolation', () => {
       await expect(pageA.getByText('บันทึกแล้ว')).toBeVisible();
       await pageA.goto(`${BASE_URL}/docs`);
       await expect(pageA.getByRole('heading', { name: userADocumentTitle, exact: true })).toBeVisible();
+      await expectPageHasReadableText(pageA);
 
       // ขั้นตอนต่อ: ล็อกอินเป็น User B ใน context แยก และตรวจว่าไม่เห็นชื่อเอกสารนั้น
       await loginToSystem(pageB, userBUsername, userBPassword);
       await pageB.goto(`${BASE_URL}/docs`);
       await expect(pageB.getByRole('heading', { name: userADocumentTitle, exact: true })).toHaveCount(0);
+      await expectPageHasReadableText(pageB);
     } finally {
       await contextA.close();
       await contextB.close();

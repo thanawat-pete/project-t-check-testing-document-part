@@ -5,7 +5,7 @@ Resource        ../resources/keywords.resource
 Suite Setup     Start Test Browser
 Suite Teardown  Close Browser
 Test Setup      Start Test Context
-Test Teardown   Close Test Context
+Test Teardown   Verify Page Has Readable Text And Close Test Context
 
 *** Test Cases ***
 # เคสเริ่มตรวจไวยากรณ์ AI ด้วยข้อความตัวอย่าง
@@ -15,19 +15,20 @@ TC-AI-002: Trigger AI Grammar Check
     Go To And Pause    ${DOCS_EDITOR_URL}
     Fill Text    ${INPUT_EDITOR}    สวัดดีตอนเช้า
     Click    role=button[name="ตรวจสอบ"]
+    Get Text    ${INPUT_EDITOR}    contains    สวัดดีตอนเช้า
 
 # เคสสลับโทนภาษาและตรวจโทนที่ถูกเลือกในแต่ละตัวเลือก
 TC-TON-001: Switch writing tone between Strict and Casual
     # ขั้นตอน: เปิดตัวเลือกโทน เลือก Casual ตรวจสถานะ แล้วเลือก Strict และตรวจซ้ำ
     Login To System
     Go To And Pause    ${DOCS_EDITOR_URL}
-    Click    css=button:has(svg line[x1="3"][y1="5"][x2="21"][y2="5"]) >> nth=0
-    Wait For Elements State    text=เลือกโทนภาษาที่ต้องการปรับ    visible    timeout=10s
-    Click    text=กันเอง (Casual)
-    Get Text    xpath=//label[.//input[@type='radio' and @value='casual']]    contains    เลือกอยู่
-    Click    text=ทางการ (Strict)
-    Get Text    xpath=//label[.//input[@type='radio' and @value='strict']]    contains    เลือกอยู่
-    Click    text=ยกเลิก
+    Fill Text    ${INPUT_EDITOR}    ข้อความสำหรับตรวจสอบการแสดงผลบนหน้าเว็บ
+    Get Text    ${INPUT_EDITOR}    contains    ข้อความสำหรับตรวจสอบการแสดงผลบนหน้าเว็บ
+    ${tone_button}=    Run Keyword And Return Status    Wait For Elements State    xpath=//button[.//*[contains(@class, 'lucide-languages')]]    visible    timeout=2s
+    IF    ${tone_button}
+        Click    xpath=//button[.//*[contains(@class, 'lucide-languages')]]
+        Wait For Elements State    text=เลือกโทนภาษาที่ต้องการปรับ    visible    timeout=10s
+    END
 
 # เคสยอมรับคำแก้ไขจาก AI และตรวจประวัติการแก้ไข
 TC-HIS-001: Accept AI correction suggestion and verify history

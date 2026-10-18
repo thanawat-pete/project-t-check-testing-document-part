@@ -5,7 +5,7 @@ Resource        ../resources/keywords.resource
 Suite Setup     Start Test Browser
 Suite Teardown  Close Browser
 Test Setup      Start Test Context
-Test Teardown   Close Test Context
+Test Teardown   Verify Page Has Readable Text And Close Test Context
 
 *** Test Cases ***
 # เคสผู้เยี่ยมชมเปิดหน้ารายการเอกสารแล้วถูกส่งไปหน้า editor

@@ -28,10 +28,17 @@ function addNavigationPause(page) {
   return page;
 }
 
+async function expectPageHasReadableText(page) {
+  const pageText = await page.locator('body').innerText();
+  expect(pageText.trim(), 'Expected the page to contain readable text').not.toBe('');
+}
+
 const test = base.extend({
   page: async ({ page }, use) => {
-    await use(addNavigationPause(page));
+    const instrumentedPage = addNavigationPause(page);
+    await use(instrumentedPage);
+    await expectPageHasReadableText(instrumentedPage);
   },
 });
 
-module.exports = { test, expect, addNavigationPause };
+module.exports = { test, expect, addNavigationPause, expectPageHasReadableText };

@@ -13,6 +13,11 @@ Start Test Context
 Close Test Context
     Close Context
 
+Verify Page Has Readable Text And Close Test Context
+    ${page_text}=    Get Text    xpath=//body
+    Close Test Context
+    Should Not Be Empty    ${page_text}
+
 Go To And Pause
     [Arguments]    ${url}
     Go To    ${url}
