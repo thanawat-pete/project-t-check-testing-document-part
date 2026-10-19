@@ -6,7 +6,7 @@ test.describe('Feature 5: Document Import & Export', () => {
     await loginToSystem(page);
   });
 
-  // เคสตรวจว่าหน้าคลังมีทางเลือกนำเข้าไฟล์
+  // เปิดเมนูนำเข้าจากหน้าคลังและตรวจว่ามีตัวเลือกนำเข้าไฟล์ TXT, DOCX หรือ PDF
   test('TC-IMP-001: Import local text file into document', async ({ page }) => {
     // ขั้นตอน: เปิดคลังและเตรียมปุ่ม Import สำหรับการนำเข้า
     await page.goto(`${BASE_URL}/docs`);
@@ -16,7 +16,7 @@ test.describe('Feature 5: Document Import & Export', () => {
     await expect(page.getByRole('button', { name: 'File (TXT, DOCX, PDF)' })).toBeVisible();
   });
 
-  // เคสเปิดเมนูส่งออกเอกสารจากหน้า editor
+  // เปิดเมนูส่งออก ตรวจตัวเลือกรูปแบบไฟล์ และเลือก PDF เพื่อยืนยันข้อความเมื่อเอกสารไม่มีเนื้อหา
   test('TC-EXP-001: Open Export modal and select export format', async ({ page }) => {
     // ขั้นตอน: เปิด editor แล้วกดปุ่มส่งออกเมื่อปุ่มปรากฏ
     await page.goto(`${BASE_URL}/docs/editor`);

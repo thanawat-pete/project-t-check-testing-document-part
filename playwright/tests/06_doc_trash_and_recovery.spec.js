@@ -6,7 +6,7 @@ test.describe('Feature 6: Trash Lifecycle & Hard Delete', () => {
     await loginToSystem(page);
   });
 
-  // เคสย้ายเอกสารที่กำลังใช้งานไปยังถังขยะและยืนยันการลบ
+  // เปิดคลัง เลือกย้ายเอกสารรายการแรกไปถังขยะ และยืนยันการดำเนินการเมื่อมีปุ่มให้เลือก
   test('TC-TRH-001: Move an active document to trash', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs`);
     await expect(page.getByRole('heading', { level: 4 }).first()).toBeVisible();
@@ -19,7 +19,7 @@ test.describe('Feature 6: Trash Lifecycle & Hard Delete', () => {
     }
   });
 
-  // เคสเปิดหน้าจัดการถังขยะจากคลังเอกสาร
+  // เปิดหน้าถังขยะจากคลังเอกสารและตรวจว่าเปลี่ยนหน้าไปยัง /docs/trash
   test('TC-TRH-002: Trash Management & Search', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs`);
     const trashBtn = page.locator('a, button').filter({ hasText: 'ถังขยะ' }).first();
@@ -28,7 +28,7 @@ test.describe('Feature 6: Trash Lifecycle & Hard Delete', () => {
     await expect(page.locator('body')).toContainText('ถังขยะ');
   });
 
-  // เคสกู้คืนเอกสารจากถังขยะเมื่อมีเอกสารให้กู้คืน
+  // ตรวจหน้าถังขยะ และกู้คืนรายการแรกพร้อมยืนยันเมื่อมีรายการให้กู้คืน
   test('TC-TRH-003: Restore Document from Trash', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs/trash`);
     await expect(page.locator('body')).toContainText('ถังขยะ');
@@ -41,7 +41,7 @@ test.describe('Feature 6: Trash Lifecycle & Hard Delete', () => {
     }
   });
 
-  // เคสลบเอกสารทั้งหมดในถังขยะอย่างถาวรเมื่อมีรายการ
+  // ตรวจหน้าถังขยะ และล้างรายการทั้งหมดพร้อมยืนยันเมื่อมีปุ่มล้างถังขยะ
   test('TC-TRH-004: Hard Delete & Empty Trash', async ({ page }) => {
     await page.goto(`${BASE_URL}/docs/trash`);
     await expect(page.locator('body')).toContainText('ถังขยะ');

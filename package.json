@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
+    "test:selenium": "node --test selenium/tests/guest-redirect.test.js",
     "robot": "node robot/run.js"
   },
   "devDependencies": {
     "@playwright/test": "^1.42.0",
     "@types/node": "^20.11.24",
-    "dotenv": "^18.0.7"
+    "dotenv": "^18.0.7",
+    "selenium-webdriver": "^4.51.0"
   }
 }

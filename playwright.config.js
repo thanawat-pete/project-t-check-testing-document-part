@@ -14,7 +14,7 @@ module.exports = defineConfig({
     trace: 'on-first-retry',
     baseURL: 'https://t-check-two.vercel.app',
     screenshot: 'on', // Capture screenshot for every test (or 'only-on-failure')
-    video: 'retain-on-failure',
+    video: 'on',
   },
   projects: [
     {

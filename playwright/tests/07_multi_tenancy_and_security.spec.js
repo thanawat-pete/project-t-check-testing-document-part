@@ -5,7 +5,7 @@ const userBUsername = process.env.TEST_USER_B_USERNAME;
 const userBPassword = process.env.TEST_USER_B_PASSWORD;
 
 test.describe('Feature 7: Multi-Tenancy & IDOR Isolation', () => {
-  // เคสตรวจว่าเอกสารของ User A ไม่ปรากฏในคลังของ User B
+  // สร้างเอกสารในบัญชี A แล้วตรวจว่าบัญชี B ที่แยก session ไม่เห็นเอกสารนั้น
   test('TC-SEC-001: User B cannot see User A documents', async ({ browser }) => {
     test.skip(
       !userBUsername || !userBPassword,
@@ -38,6 +38,7 @@ test.describe('Feature 7: Multi-Tenancy & IDOR Isolation', () => {
       await expect(pageB.getByRole('heading', { name: userADocumentTitle, exact: true })).toHaveCount(0);
       await expectPageHasReadableText(pageB);
     } finally {
+      // ปิด context ของทั้งสองบัญชีเสมอ แม้การทดสอบจะผ่านหรือเกิดข้อผิดพลาด
       await contextA.close();
       await contextB.close();
     }

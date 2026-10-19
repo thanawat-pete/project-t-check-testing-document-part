@@ -33,6 +33,7 @@ async function expectPageHasReadableText(page) {
   expect(pageText.trim(), 'Expected the page to contain readable text').not.toBe('');
 }
 
+// ทุกเคสที่ใช้ page fixture จะตรวจว่าหน้ายังมีข้อความหลังทดสอบ แล้ว Playwright จะปิด page ให้อัตโนมัติ
 const test = base.extend({
   page: async ({ page }, use) => {
     const instrumentedPage = addNavigationPause(page);

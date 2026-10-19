@@ -7,7 +7,7 @@ test.describe('Feature 4: AI Grammar, Tone & History', () => {
     await page.goto(`${BASE_URL}/docs/editor`);
   });
 
-  // เคสป้อนข้อความตัวอย่างและเริ่มตรวจไวยากรณ์ด้วย AI
+  // กรอกข้อความตัวอย่าง กดปุ่มตรวจไวยากรณ์หากแสดงอยู่ และตรวจว่าข้อความยังอยู่ใน editor
   test('TC-AI-002: Trigger AI Grammar Check with Ctrl+Enter shortcut', async ({ page }) => {
     // ขั้นตอน: กรอกข้อความ แล้วกดปุ่มตรวจสอบเมื่อปุ่มพร้อมใช้งาน
     await page.locator('.ProseMirror').fill('สวัดดีตอนเช้า');
@@ -18,7 +18,7 @@ test.describe('Feature 4: AI Grammar, Tone & History', () => {
     await expect(page.locator('.ProseMirror')).toContainText('สวัดดีตอนเช้า');
   });
 
-  // เคสเปิดหน้าต่างตัวเลือกโทนภาษาและตรวจว่าหน้าต่างแสดงขึ้น
+  // กรอกข้อความ แล้วเปิดตัวเลือกโทนภาษาเมื่อมีปุ่มให้ใช้งานและตรวจว่า modal ปรากฏ
   test('TC-TON-001: Switch writing tone between Strict and Casual', async ({ page }) => {
     const editor = page.locator('.ProseMirror');
     await editor.fill('ข้อความสำหรับตรวจสอบการแสดงผลบนหน้าเว็บ');
@@ -32,7 +32,7 @@ test.describe('Feature 4: AI Grammar, Tone & History', () => {
     }
   });
 
-  // เคสยอมรับคำแก้ไขจาก AI และตรวจว่าประวัติแสดงรายการแก้ไข
+  // ส่งข้อความให้ AI ตรวจ รับคำแนะนำ ตรวจข้อความที่แก้แล้ว และตรวจรายการในประวัติ
   test('TC-HIS-001: Accept AI correction suggestion and verify FIFO history limit', async ({ page }) => {
     // ขั้นตอน: ส่งข้อความให้ตรวจ รอคำแนะนำ กดยอมรับ และตรวจข้อความที่ถูกแก้ไข
     await page.locator('.ProseMirror').fill('ทกสอก');

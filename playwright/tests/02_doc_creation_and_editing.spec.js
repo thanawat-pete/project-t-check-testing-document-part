@@ -6,7 +6,7 @@ test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
     await loginToSystem(page);
   });
 
-  // เคสสร้างเอกสารจากคลังและตรวจว่าระบบนำไปยังหน้า editor
+  // ตรวจว่ากดสร้างเอกสารจากคลังแล้วไปหน้า editor ซึ่งแสดงช่องชื่อและพื้นที่เขียนเนื้อหา
   test('TC-CRE-001: Click create new document and redirect to editor', async ({ page }) => {
     // ขั้นตอน: เปิดคลัง กดสร้างเอกสาร รอเปลี่ยนหน้า และตรวจช่องชื่อเอกสาร
     await page.goto(`${BASE_URL}/docs`);
@@ -17,7 +17,7 @@ test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
     await expect(page.locator('.ProseMirror')).toBeVisible();
   });
 
-  // เคสเปลี่ยนชื่อเอกสารและกรอกเนื้อหาภาษาไทย
+  // เปลี่ยนชื่อเอกสารและกรอกเนื้อหาภาษาไทย จากนั้นตรวจค่าชื่อและข้อความใน editor
   test('TC-EDT-001: Rename document title and monitor live Thai statistics', async ({ page }) => {
     // ขั้นตอน: เปลี่ยนชื่อ ตรวจค่าชื่อ แล้วกรอกและตรวจเนื้อหาใน editor
     await page.goto(`${BASE_URL}/docs/editor`);
@@ -28,7 +28,7 @@ test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
     await expect(page.locator('.ProseMirror')).toContainText('ระบบตรวจสอบไวยากรณ์ภาษาไทยรุ่นใหม่ล่าสุด');
   });
 
-  // เคสตรวจการบันทึกอัตโนมัติและคำสั่งบันทึกด้วย Ctrl+S
+  // ตรวจสถานะบันทึกหลังพิมพ์รอ auto-save และหลังสั่งบันทึกด้วย Ctrl+S
   test('TC-EDT-002: Debounced auto-save and manual Ctrl+S shortcut', async ({ page }) => {
     // ขั้นตอน: กรอกข้อความรอสถานะบันทึก แก้ข้อความอีกครั้ง และสั่งบันทึกด้วยคีย์ลัด
     await page.goto(`${BASE_URL}/docs/editor`);
