@@ -1,6 +1,11 @@
 const { test, expect } = require('../utils/fixtures');
 const { loginToSystem, BASE_URL } = require('../utils/auth');
 
+test.use({
+  headless: Boolean(process.env.CI),
+  launchOptions: { slowMo: process.env.CI ? 0 : 500 },
+});
+
 test.describe('Feature 2: Document Creation, Title Edit & Save', () => {
   test.beforeEach(async ({ page }) => {
     await loginToSystem(page);

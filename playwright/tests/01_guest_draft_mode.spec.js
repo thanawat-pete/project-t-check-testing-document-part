@@ -1,6 +1,12 @@
 const { test, expect } = require('../utils/fixtures');
 const { loginToSystem, BASE_URL } = require('../utils/auth');
 
+test.use({
+  headless: Boolean(process.env.CI),
+  launchOptions: { slowMo: process.env.CI ? 0 : 500 },
+});
+
+
 test.describe('Feature 1: Guest Mode & Local Draft', () => {
   // ตรวจว่าผู้เยี่ยมชมที่เปิด /docs ถูกเปลี่ยนเส้นทางไปยังหน้า editor
   test('TC-GST-001: Guest navigating to /docs is redirected to /docs/editor', async ({ page }) => {

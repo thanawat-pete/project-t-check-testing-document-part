@@ -1,33 +1,60 @@
 const { test, expect } = require('../utils/fixtures');
-const { loginToSystem, BASE_URL } = require('../utils/auth');
+const { readFile } = require('node:fs/promises');
+const { BASE_URL } = require('../utils/auth');
+
+test.use({
+  headless: Boolean(process.env.CI),
+  launchOptions: { slowMo: process.env.CI ? 0 : 700 },
+});
 
 test.describe('Feature 5: Document Import & Export', () => {
-  test.beforeEach(async ({ page }) => {
-    await loginToSystem(page);
-  });
-
-  // เปิดเมนูนำเข้าจากหน้าคลังและตรวจว่ามีตัวเลือกนำเข้าไฟล์ TXT, DOCX หรือ PDF
+  // อัปโหลดไฟล์ TXT จริง แล้วตรวจว่าข้อความจากไฟล์ปรากฏใน editor
   test('TC-IMP-001: Import local text file into document', async ({ page }) => {
-    // ขั้นตอน: เปิดคลังและเตรียมปุ่ม Import สำหรับการนำเข้า
-    await page.goto(`${BASE_URL}/docs`);
-    const importBtn = page.getByText('Import', { exact: true });
-    await expect(importBtn).toBeVisible();
-    await importBtn.click();
-    await expect(page.getByRole('button', { name: 'File (TXT, DOCX, PDF)' })).toBeVisible();
+    const importedText = `Playwright import verification ${Date.now()}`;
+    await test.step('เปิดหน้า Editor', async () => {
+      await page.goto(`${BASE_URL}/docs/editor`);
+    });
+
+    await test.step('เลือกไฟล์ TXT สำหรับนำเข้า', async () => {
+      await page.locator('#file-upload').setInputFiles({
+        name: 'playwright-import-check.txt',
+        mimeType: 'text/plain',
+        buffer: Buffer.from(importedText, 'utf8'),
+      });
+    });
+
+    await test.step('ตรวจว่าเนื้อหาไฟล์ปรากฏใน Editor', async () => {
+      await expect(page.locator('.ProseMirror').first()).toContainText(importedText);
+    });
   });
 
-  // เปิดเมนูส่งออก ตรวจตัวเลือกรูปแบบไฟล์ และเลือก PDF เพื่อยืนยันข้อความเมื่อเอกสารไม่มีเนื้อหา
-  test('TC-EXP-001: Open Export modal and select export format', async ({ page }) => {
-    // ขั้นตอน: เปิด editor แล้วกดปุ่มส่งออกเมื่อปุ่มปรากฏ
-    await page.goto(`${BASE_URL}/docs/editor`);
-    // หาไอคอนดาวน์โหลด/ส่งออกในแถบเครื่องมือ
-    const exportBtn = page.locator('button').filter({ has: page.locator('.lucide-download') }).first();
-    await expect(exportBtn).toBeVisible();
-    await exportBtn.click();
-    const pdfExportOption = page.getByRole('button', { name: /PDF/ }).first();
-    await expect(pdfExportOption).toBeVisible();
-    await expect(page.getByText(/Word|DOCX/, { exact: false }).first()).toBeVisible();
-    await pdfExportOption.click();
-    await expect(page.getByRole('status').filter({ hasText: 'ไม่มีเนื้อหาให้ส่งออก' })).toBeVisible();
+  // ส่งออกข้อความใน editor เป็นไฟล์ TXT แล้วตรวจเนื้อหาที่ดาวน์โหลดได้จริง
+  test('TC-EXP-001: Export document content to a text file', async ({ page }) => {
+    const exportedText = `Playwright export verification ${Date.now()}`;
+    await test.step('เปิดหน้า Editor และกรอกข้อความทดสอบ', async () => {
+      await page.goto(`${BASE_URL}/docs/editor`);
+      await page.locator('.ProseMirror').first().fill(exportedText);
+      await expect(page.locator('.ProseMirror').first()).toContainText(exportedText);
+    });
+
+    const exportButton = page.locator('button').filter({ has: page.locator('.lucide-download') }).first();
+    const txtExportOption = page.getByRole('button', { name: /\.txt/ });
+    await test.step('เปิดเมนูส่งออกและเลือกไฟล์ TXT', async () => {
+      await expect(exportButton).toBeVisible();
+      await exportButton.click();
+      await expect(txtExportOption).toBeVisible();
+    });
+
+    let download;
+    await test.step('ดาวน์โหลดไฟล์และตรวจเนื้อหา', async () => {
+      [download] = await Promise.all([
+        page.waitForEvent('download'),
+        txtExportOption.click(),
+      ]);
+
+      expect(download.suggestedFilename()).toMatch(/\.txt$/i);
+      const downloadedContent = await readFile(await download.path(), 'utf8');
+      expect(downloadedContent).toContain(exportedText);
+    });
   });
 });
